@@ -172,16 +172,16 @@
 
   .social-links a {
     font-family: var(--mono);
+    font-weight: 700;
     font-size: 0.85rem;
     padding: 8px 16px;
-    border: 1px solid var(--border);
     border-radius: 3px;
-    color: var(--text);
+    background: var(--accent);
+    color: var(--on-scrim);
   }
 
   .social-links a:hover {
-    border-color: var(--accent);
-    color: var(--accent);
+    opacity: 0.88;
     text-decoration: none;
   }
 
@@ -424,10 +424,20 @@
     text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
   }
 
+  .project-card.personal.project-card--image .project-role {
+    color: var(--on-scrim);
+  }
+
   .project-card--image .project-tags span {
     background: rgba(26, 23, 35, 0.55);
     color: var(--on-scrim);
     border-color: rgba(245, 243, 250, 0.35);
+  }
+
+  .project-card--image .project-links a {
+    color: var(--on-scrim);
+    text-decoration: underline;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
   }
 
   .project-card--image.bg-steel-hunters {
@@ -452,6 +462,24 @@
     background-image:
       linear-gradient(180deg, rgba(26,23,35,0.55) 0%, rgba(26,23,35,0.85) 65%, rgba(26,23,35,0.92) 100%),
       url("assets/t-man-journey.jpg");
+  }
+
+  .project-card--image.bg-run-pikachu {
+    background-image:
+      linear-gradient(180deg, rgba(26,23,35,0.55) 0%, rgba(26,23,35,0.85) 65%, rgba(26,23,35,0.92) 100%),
+      url("assets/run-pikachu.png");
+  }
+
+  .project-card--image.bg-boneloop {
+    background-image:
+      linear-gradient(180deg, rgba(26,23,35,0.55) 0%, rgba(26,23,35,0.85) 65%, rgba(26,23,35,0.92) 100%),
+      url("assets/boneloop.jpg");
+  }
+
+  .project-card--image.bg-lightyears {
+    background-image:
+      linear-gradient(180deg, rgba(26,23,35,0.55) 0%, rgba(26,23,35,0.85) 65%, rgba(26,23,35,0.92) 100%),
+      url("assets/lightyears.jpg");
   }
 
   /* ---- Experience ---- */
@@ -564,6 +592,13 @@
     opacity: 0.88;
   }
 
+  .btn-group {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
   footer {
     text-align: center;
     padding: 32px 0;
@@ -589,24 +624,8 @@
     <p class="hero-tag">whoami<span class="cursor" aria-hidden="true"></span></p>
     <h1>Iana Gusarchuk<span class="accent" aria-hidden="true">.</span></h1>
     <p class="role">Gameplay Programmer<span class="sep" aria-hidden="true">//</span>8+ years shipping PC, console &amp; mobile titles</p>
-    <p class="hero-summary">
-      Gameplay programmer with 8+ years of experience shipping PC, console, and mobile
-      titles across multiple genres. Proven track record of designing data-driven gameplay
-      systems, ECS architectures, and modular frameworks that accelerate iteration for
-      designers and reduce long-term engineering overhead. Proficient in Unreal Engine 4/5,
-      working from early-stage architectural groundwork to live production features.
-    </p>
-    <div class="hero-badges">
-      <span>C/C++</span>
-      <span>Unreal Engine 4/5</span>
-      <span>Mass Entity (ECS)</span>
-      <span>Gameplay Ability System</span>
-      <span>Data-Driven Frameworks</span>
-      <span>Proprietary Engines</span>
-    </div>
     <div class="contact-line">
       <span>Location</span> Guildford, United Kingdom
-      <span>Phone</span> <a href="tel:+447835808444">+44 7835 808444</a>
     </div>
     <div class="social-links">
       <a href="https://www.linkedin.com/in/i-gusarchuk/" target="_blank" rel="noopener">LinkedIn</a>
@@ -632,11 +651,14 @@
   <div class="container">
     <h2 id="about-heading"><span class="idx" aria-hidden="true">01.</span>about</h2>
     <p class="about-text" style="color: var(--text-muted); max-width: 700px; font-size: 1.02rem;">
-      8+ years designing and shipping gameplay systems across AAA and indie productions —
-      from data-driven projectile and ability systems on Unreal Engine 5's Mass Entity
-      (ECS) framework, to modular game-scenario tooling that lets designers iterate without
-      engineering bottlenecks. Comfortable bootstrapping architecture on proprietary
-      engines as well as owning production features on established Unreal pipelines.
+      I've spent 8+ years designing and shipping gameplay systems across AAA and indie
+      productions — from data-driven projectile and ability systems on Unreal Engine 5's
+      Mass Entity (ECS) framework, to modular game-scenario tooling that lets designers
+      iterate without engineering bottlenecks. I'm comfortable bootstrapping architecture
+      on proprietary engines as well as owning production features on established Unreal
+      pipelines. Outside of work, I build engine-level systems from scratch — a hand-rolled
+      C++20 engine with test-first AI (state machines, A*, steering) and an ECS RPG layer —
+      as personal professional development, and sometimes participate in game jams.
     </p>
   </div>
 </section>
@@ -648,7 +670,8 @@
       <div class="skill-group">
         <h4>Languages</h4>
         <ul>
-          <li>C / C++</li>
+          <li>C / C++20</li>
+          <li>C#</li>
           <li>Unreal Blueprints</li>
         </ul>
       </div>
@@ -656,15 +679,17 @@
         <h4>Engines</h4>
         <ul>
           <li>Unreal Engine 4/5</li>
+          <li>Unity</li>
           <li>Proprietary Engines</li>
-          <li>SDL</li>
+          <li>SDL / SFML</li>
         </ul>
       </div>
       <div class="skill-group">
         <h4>Systems &amp; Architecture</h4>
         <ul>
-          <li>Mass Entity / ECS</li>
+          <li>ECS (Mass Entity, EnTT)</li>
           <li>Gameplay Ability System</li>
+          <li>AI (State Machines, A*, Steering)</li>
           <li>MVC UI Architecture</li>
           <li>Data-Driven Frameworks</li>
         </ul>
@@ -675,8 +700,9 @@
           <li>Wwise</li>
           <li>Perforce / Git</li>
           <li>Jira / Asana / Miro / Figma</li>
-          <li>TeamCity / Horde / Jenkins</li>
+          <li>TeamCity / Horde / Jenkins / GitHub Actions</li>
           <li>CMake</li>
+          <li>Test-Driven Development (doctest)</li>
         </ul>
       </div>
     </div>
@@ -701,6 +727,9 @@
             <span>Tooling</span>
             <span>Accessibility</span>
           </div>
+          <div class="project-links">
+            <a href="https://store.steampowered.com/app/1691340/" target="_blank" rel="noopener">Steam</a>
+          </div>
         </div>
         <div class="project-card project-card--image bg-magic-high">
           <div class="project-role">Gameplay/UI Programmer · Social Quantum</div>
@@ -723,6 +752,9 @@
             <span>UI</span>
             <span>Backend Integration</span>
           </div>
+          <div class="project-links">
+            <a href="https://store.steampowered.com/app/1124980/Watchers/" target="_blank" rel="noopener">Steam</a>
+          </div>
         </div>
         <div class="project-card project-card--image bg-t-man-journey">
           <div class="project-role">C++ Programmer · 3D Forge</div>
@@ -741,10 +773,10 @@
     <div class="projects-subsection">
       <div class="projects-subheading">Personal Projects</div>
       <div class="project-grid">
-        <div class="project-card personal">
+        <div class="project-card personal project-card--image bg-lightyears">
           <div class="project-role">Personal Project</div>
           <h3>LightYears</h3>
-          <div class="project-studio">Hand-Rolled C++20 Engine — 2025–2026</div>
+          <div class="project-studio">Solo Project — C++20 — 2025–2026</div>
           <p>A 2D space-shooter built on a hand-rolled C++20 engine. Beyond the arcade gameplay, it implements reusable, test-first systems: a generic state machine, grid pathfinding (A*) and steering AI, an ECS-based RPG layer (EnTT) for stats/levels/loot, data-driven balancing, audio, animation, and an in-engine debug overlay — 91 doctest cases / 4286 assertions, with CI running configure/build/test on every push.</p>
           <div class="project-tags">
             <span>C++20</span>
@@ -758,14 +790,33 @@
             <a href="https://github.com/Tirukomi/LightYears" target="_blank" rel="noopener">Source</a>
           </div>
         </div>
-        <div class="project-card personal">
+        <div class="project-card personal project-card--image bg-boneloop">
           <div class="project-role">Personal Project</div>
-          <h3>Project Name</h3>
-          <div class="project-studio">Engine / Platform — Year</div>
-          <p>Add a short description of a personal project, game jam entry, or side experiment — what it does and what you built or explored.</p>
+          <h3>BoneLoop</h3>
+          <div class="project-studio">Game Jam — Unreal Engine (C++) — 2025</div>
+          <p>A tactical puzzle-shooter where you play a skeleton with one arrow — every death brings you back, alongside all your past selves, to coordinate as a squad. Contributed the death/respawn loop mechanic and the gameplay recording/playback system that replays each past run.</p>
           <div class="project-tags">
-            <span>Tech</span>
-            <span>Tech</span>
+            <span>Death/Respawn Loop</span>
+            <span>Gameplay Recording</span>
+            <span>Puzzle Design</span>
+          </div>
+          <div class="project-links">
+            <a href="https://ice8scream.itch.io/boneloop" target="_blank" rel="noopener">itch.io</a>
+          </div>
+        </div>
+        <div class="project-card personal project-card--image bg-run-pikachu">
+          <div class="project-role">Personal Project</div>
+          <h3>Run, Pikachu!</h3>
+          <div class="project-studio">Game Jam — Unity (C#) — 2018</div>
+          <p>A 2D platformer built in Unity for a game jam — run through the forest as Pikachu and collect as many berries as you can find. Handled the programming, paired with external artwork.</p>
+          <div class="project-tags">
+            <span>Unity</span>
+            <span>C#</span>
+            <span>2D Platformer</span>
+            <span>Game Jam</span>
+          </div>
+          <div class="project-links">
+            <a href="https://tirukomi.itch.io/run-pikachu-pokemon-fan-game" target="_blank" rel="noopener">itch.io</a>
           </div>
         </div>
       </div>
@@ -860,7 +911,10 @@
   <div class="container">
     <h2 id="contact-heading"><span class="idx" aria-hidden="true">06.</span>contact</h2>
     <p>Open to gameplay programming opportunities. Reach out to talk shop, review a build, or discuss a role.</p>
-    <a class="btn" href="mailto:gusarcukyana@gmail.com">say_hello()</a>
+    <div class="btn-group">
+      <a class="btn" href="mailto:gusarcukyana@gmail.com">say_hello()</a>
+      <a class="btn" href="https://www.linkedin.com/in/i-gusarchuk/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
   </div>
 </section>
 
@@ -868,7 +922,7 @@
 
 <footer>
   <div class="container">
-    // © <span id="year"></span> Iana Gusarchuk — Guildford, United Kingdom.
+    // © <span id="year"></span> Iana Gusarchuk.
   </div>
 </footer>
 
