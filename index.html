@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iana Gusarchuk — Gameplay Programmer</title>
+<meta name="description" content="Portfolio of Iana Gusarchuk — Gameplay Programmer. Unreal Engine 4/5, ECS/Mass Entity, Gameplay Ability System, data-driven gameplay frameworks.">
+<style>
+  :root {
+    --bg: #090b0f;
+    --bg-alt: #0f131a;
+    --card: #10141c;
+    --text: #d7dde5;
+    --text-muted: #6d7787;
+    --text-dim: #4a5361;
+    --accent: #39ff9d;
+    --accent-dim: rgba(57, 255, 157, 0.12);
+    --accent2: #ffb454;
+    --border: #1e2530;
+    --mono: "JetBrains Mono", "Fira Code", "SFMono-Regular", Consolas, "Courier New", monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --max-width: 980px;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    background:
+      linear-gradient(rgba(57, 255, 157, 0.025) 1px, transparent 1px) 0 0 / 100% 28px,
+      var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  code, .mono { font-family: var(--mono); }
+
+  /* ---- Hero ---- */
+  header.hero {
+    padding: 90px 0 56px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .hero-tag {
+    font-family: var(--mono);
+    color: var(--accent);
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    margin: 0 0 18px;
+  }
+
+  .hero-tag::before { content: "> "; color: var(--text-dim); }
+
+  .hero-tag .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 1em;
+    background: var(--accent);
+    margin-left: 4px;
+    vertical-align: -2px;
+    animation: blink 1s steps(1) infinite;
+  }
+
+  @keyframes blink { 50% { opacity: 0; } }
+
+  h1 {
+    font-size: 2.6rem;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+
+  h1 .accent { color: var(--accent); }
+
+  .role {
+    font-family: var(--mono);
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    margin: 0 0 20px;
+  }
+
+  .role .sep { color: var(--text-dim); margin: 0 8px; }
+
+  .hero-summary {
+    color: var(--text-muted);
+    max-width: 700px;
+    font-size: 0.98rem;
+    margin: 0 0 28px;
+  }
+
+  .hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+
+  .hero-badges span {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--accent);
+    border: 1px solid var(--border);
+    background: var(--accent-dim);
+    padding: 4px 10px;
+    border-radius: 3px;
+  }
+
+  .contact-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    margin-bottom: 20px;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+
+  .contact-line span { color: var(--text-dim); }
+
+  .social-links {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .social-links a {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--text);
+  }
+
+  .social-links a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  /* ---- Nav ---- */
+  nav.tabs {
+    position: sticky;
+    top: 0;
+    background: rgba(9, 11, 15, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    z-index: 10;
+  }
+
+  nav.tabs .container {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  nav.tabs a {
+    font-family: var(--mono);
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    padding: 6px 12px;
+    border-radius: 3px;
+  }
+
+  nav.tabs a::before { content: "["; color: var(--text-dim); }
+  nav.tabs a::after { content: "]"; color: var(--text-dim); }
+
+  nav.tabs a:hover {
+    color: var(--accent);
+    background: var(--accent-dim);
+    text-decoration: none;
+  }
+
+  /* ---- Sections ---- */
+  section {
+    padding: 64px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  section:last-of-type { border-bottom: none; }
+
+  h2 {
+    font-family: var(--mono);
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    margin: 0 0 32px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+  }
+
+  h2 .idx {
+    color: var(--accent);
+    margin-right: 10px;
+  }
+
+  h2::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    margin-left: 16px;
+  }
+
+  /* ---- Skills ---- */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 24px;
+  }
+
+  .skill-group h4 {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent2);
+    margin: 0 0 12px;
+  }
+
+  .skill-group ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .skill-group li {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 3px;
+  }
+
+  /* ---- Projects ---- */
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .project-grid--2x2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 640px) {
+    .project-grid--2x2 {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .project-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .project-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .project-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    box-shadow: 0 8px 24px rgba(57, 255, 157, 0.08);
+  }
+
+  .project-card:hover::before { opacity: 1; }
+
+  .project-role {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--accent2);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+
+  .project-card h3 {
+    margin: 0 0 4px;
+    font-size: 1.05rem;
+  }
+
+  .project-card .project-studio {
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  .project-card p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    flex-grow: 1;
+    margin: 0 0 16px;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .project-tags span {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--accent);
+    border: 1px solid var(--border);
+    background: var(--accent-dim);
+    padding: 3px 8px;
+    border-radius: 3px;
+  }
+
+  .projects-subsection + .projects-subsection {
+    margin-top: 48px;
+  }
+
+  .projects-subheading {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent2);
+    margin: 0 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .projects-subheading::before { content: "//"; color: var(--text-dim); }
+
+  .project-card.personal {
+    border-style: dashed;
+  }
+
+  .project-card.personal .project-role { color: var(--accent); }
+
+  .project-card--image {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .project-card--image .project-role,
+  .project-card--image h3,
+  .project-card--image .project-studio,
+  .project-card--image p {
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+  }
+
+  .project-card--image.bg-steel-hunters {
+    background-image:
+      linear-gradient(180deg, rgba(9,11,15,0.55) 0%, rgba(9,11,15,0.88) 65%, var(--card) 100%),
+      url("assets/steel-hunters.jpg");
+  }
+
+  .project-card--image.bg-magic-high {
+    background-image:
+      linear-gradient(180deg, rgba(9,11,15,0.55) 0%, rgba(9,11,15,0.88) 65%, var(--card) 100%),
+      url("assets/magic-high.jpg");
+  }
+
+  .project-card--image.bg-watchers {
+    background-image:
+      linear-gradient(180deg, rgba(9,11,15,0.55) 0%, rgba(9,11,15,0.88) 65%, var(--card) 100%),
+      url("assets/watchers.png");
+  }
+
+  .project-card--image.bg-t-man-journey {
+    background-image:
+      linear-gradient(180deg, rgba(9,11,15,0.55) 0%, rgba(9,11,15,0.88) 65%, var(--card) 100%),
+      url("assets/t-man-journey.jpg");
+  }
+
+  /* ---- Experience ---- */
+  .timeline {
+    max-width: 760px;
+  }
+
+  .timeline-item {
+    padding-left: 28px;
+    border-left: 2px solid var(--border);
+    padding-bottom: 36px;
+    position: relative;
+  }
+
+  .timeline-item:last-child { padding-bottom: 0; }
+
+  .timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -7px;
+    top: 4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    background: var(--bg);
+    border: 2px solid var(--accent);
+    transform: rotate(45deg);
+  }
+
+  .timeline-item .meta {
+    font-family: var(--mono);
+    color: var(--accent);
+    font-size: 0.78rem;
+    margin-bottom: 6px;
+  }
+
+  .timeline-item h3 {
+    margin: 0 0 4px;
+    font-size: 1.05rem;
+  }
+
+  .timeline-item .studio {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+  }
+
+  .timeline-item ul {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin: 0;
+    padding-left: 18px;
+  }
+
+  .timeline-item li { margin-bottom: 6px; }
+
+  /* ---- Education ---- */
+  .edu-item {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 760px;
+  }
+
+  .edu-item h3 {
+    margin: 0 0 4px;
+    font-size: 1.05rem;
+  }
+
+  .edu-item .studio {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+  }
+
+  .edu-item .meta {
+    font-family: var(--mono);
+    color: var(--accent);
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+
+  /* ---- Contact ---- */
+  .contact-section {
+    text-align: center;
+  }
+
+  .contact-section h2 { justify-content: center; }
+  .contact-section h2::after { display: none; }
+
+  .contact-section p {
+    color: var(--text-muted);
+    max-width: 520px;
+    margin: 0 auto 24px;
+  }
+
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #06110a;
+    padding: 12px 28px;
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  .btn:hover {
+    text-decoration: none;
+    opacity: 0.88;
+  }
+
+  footer {
+    text-align: center;
+    padding: 32px 0;
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 0.78rem;
+  }
+
+  @media (max-width: 600px) {
+    header.hero { padding: 60px 0 40px; }
+    h1 { font-size: 1.9rem; }
+    section { padding: 48px 0; }
+    .edu-item { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="container">
+    <p class="hero-tag">whoami<span class="cursor"></span></p>
+    <h1>Iana Gusarchuk<span class="accent">.</span></h1>
+    <p class="role">Gameplay Programmer<span class="sep">//</span>8+ years shipping PC, console &amp; mobile titles</p>
+    <p class="hero-summary">
+      Gameplay programmer with 8+ years of experience shipping PC, console, and mobile
+      titles across multiple genres. Proven track record of designing data-driven gameplay
+      systems, ECS architectures, and modular frameworks that accelerate iteration for
+      designers and reduce long-term engineering overhead. Proficient in Unreal Engine 4/5,
+      working from early-stage architectural groundwork to live production features.
+    </p>
+    <div class="hero-badges">
+      <span>C/C++</span>
+      <span>Unreal Engine 4/5</span>
+      <span>Mass Entity (ECS)</span>
+      <span>Gameplay Ability System</span>
+      <span>Data-Driven Frameworks</span>
+      <span>Proprietary Engines</span>
+    </div>
+    <div class="contact-line">
+      <span>Location</span> Guildford, United Kingdom
+      <span>Phone</span> +44 7835 808444
+    </div>
+    <div class="social-links">
+      <a href="https://www.linkedin.com/in/i-gusarchuk/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:gusarcukyana@gmail.com">Email</a>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="container">
+    <a href="#about">about</a>
+    <a href="#skills">skills</a>
+    <a href="#projects">projects</a>
+    <a href="#experience">experience</a>
+    <a href="#education">education</a>
+    <a href="#contact">contact</a>
+  </div>
+</nav>
+
+<section id="about">
+  <div class="container">
+    <h2><span class="idx">01.</span>about</h2>
+    <p class="about-text" style="color: var(--text-muted); max-width: 700px; font-size: 1.02rem;">
+      8+ years designing and shipping gameplay systems across AAA and indie productions —
+      from data-driven projectile and ability systems on Unreal Engine 5's Mass Entity
+      (ECS) framework, to modular game-scenario tooling that lets designers iterate without
+      engineering bottlenecks. Comfortable bootstrapping architecture on proprietary
+      engines as well as owning production features on established Unreal pipelines.
+    </p>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="container">
+    <h2><span class="idx">02.</span>skills</h2>
+    <div class="skills-grid">
+      <div class="skill-group">
+        <h4>Languages</h4>
+        <ul>
+          <li>C / C++</li>
+          <li>Unreal Blueprints</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <h4>Engines</h4>
+        <ul>
+          <li>Unreal Engine 4/5</li>
+          <li>Proprietary Engines</li>
+          <li>SDL</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <h4>Systems &amp; Architecture</h4>
+        <ul>
+          <li>Mass Entity / ECS</li>
+          <li>Gameplay Ability System</li>
+          <li>MVC UI Architecture</li>
+          <li>Data-Driven Frameworks</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <h4>Tools &amp; Pipeline</h4>
+        <ul>
+          <li>Wwise</li>
+          <li>Perforce / Git</li>
+          <li>Jira / Asana / Miro / Figma</li>
+          <li>TeamCity / Horde / Jenkins</li>
+          <li>CMake</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="container">
+    <h2><span class="idx">03.</span>projects</h2>
+
+    <div class="projects-subsection">
+      <div class="projects-subheading">Professional Projects</div>
+      <div class="project-grid project-grid--2x2">
+        <div class="project-card project-card--image bg-steel-hunters">
+          <div class="project-role">Gameplay Programmer · DPS Games</div>
+          <h3>Steel Hunters</h3>
+          <div class="project-studio">AAA PvPvE Extraction Shooter (PC) — Aug 2023 – Aug 2025</div>
+          <p>Owned a modular Game Scenario framework for designer-driven iteration, shipped three playable game-mode prototypes in four months, and delivered runtime-configurable input remapping with non-QWERTY support.</p>
+          <div class="project-tags">
+            <span>C++</span>
+            <span>Unreal Engine</span>
+            <span>Tooling</span>
+            <span>Accessibility</span>
+          </div>
+        </div>
+        <div class="project-card project-card--image bg-magic-high">
+          <div class="project-role">Gameplay/UI Programmer · Social Quantum</div>
+          <h3>Magic High</h3>
+          <div class="project-studio">Match-3, iOS / Android (discontinued) — Nov 2019 – Jun 2020</div>
+          <p>Responsive UI layouts across the full spectrum of mobile resolutions and aspect ratios, and a refactor of the flipbook animation system to cut per-frame overhead.</p>
+          <div class="project-tags">
+            <span>C++</span>
+            <span>Mobile UI</span>
+            <span>Animation</span>
+          </div>
+        </div>
+        <div class="project-card project-card--image bg-watchers">
+          <div class="project-role">C++ Programmer · Alawar</div>
+          <h3>Watchers</h3>
+          <div class="project-studio">Battle Royale Shooter, PC (discontinued) — Feb 2019 – Nov 2019</div>
+          <p>Shipped an end-to-end battle pass — UI, client-side state, and backend integration — and prototyped gameplay objects including weapons and environmental hazards.</p>
+          <div class="project-tags">
+            <span>C++</span>
+            <span>UI</span>
+            <span>Backend Integration</span>
+          </div>
+        </div>
+        <div class="project-card project-card--image bg-t-man-journey">
+          <div class="project-role">C++ Programmer · 3D Forge</div>
+          <h3>T-Man Journey</h3>
+          <div class="project-studio">Sidescroller Runner, Android (discontinued) — May 2018 – Oct 2018</div>
+          <p>Chunk-based procedural generation for infinite levels with runtime streaming and seamless transitions, plus character traversal, animation, and collision systems.</p>
+          <div class="project-tags">
+            <span>C++</span>
+            <span>Procedural Generation</span>
+            <span>Mobile</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="projects-subsection">
+      <div class="projects-subheading">Personal Projects</div>
+      <div class="project-grid">
+        <div class="project-card personal">
+          <div class="project-role">Personal Project</div>
+          <h3>Project Name</h3>
+          <div class="project-studio">Engine / Platform — Year</div>
+          <p>Add a short description of a personal project, game jam entry, or side experiment — what it does and what you built or explored.</p>
+          <div class="project-tags">
+            <span>Tech</span>
+            <span>Tech</span>
+          </div>
+        </div>
+        <div class="project-card personal">
+          <div class="project-role">Personal Project</div>
+          <h3>Project Name</h3>
+          <div class="project-studio">Engine / Platform — Year</div>
+          <p>Add a short description of a personal project, game jam entry, or side experiment — what it does and what you built or explored.</p>
+          <div class="project-tags">
+            <span>Tech</span>
+            <span>Tech</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="container">
+    <h2><span class="idx">04.</span>experience</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="meta">Aug 2025 — Present</div>
+        <h3>Gameplay Programmer</h3>
+        <div class="studio">Wargaming · unannounced vehicular multiplayer game (PC/Console)</div>
+        <ul>
+          <li>Led the technical design and implementation of a data-driven projectile system on Unreal Engine 5's Mass Entity (ECS) framework, balancing flexibility, maintainability, and performance to sustain large numbers of concurrent entities.</li>
+          <li>Built modular, extensible player-character abilities using Unreal's Gameplay Ability System.</li>
+          <li>Bootstrapped early-stage development on a proprietary engine: mapping dependencies, authoring technical documentation, and shaping the initial architecture.</li>
+          <li>Coordinated with developers across multiple time zones to integrate gameplay systems, ensuring compatibility, stability, and efficient delivery of new features.</li>
+          <li>Collaborated with Project Managers and QA to keep the backlog prioritized and current, proactively surfacing tech debt and ensuring its prompt resolution.</li>
+        </ul>
+      </div>
+      <div class="timeline-item">
+        <div class="meta">Aug 2023 — Aug 2025</div>
+        <h3>Gameplay Programmer</h3>
+        <div class="studio">DPS Games · Steel Hunters — AAA PvPvE Extraction Shooter (PC)</div>
+        <ul>
+          <li>Architected and owned a modular Game Scenario framework that let designers iterate on gameplay flow and content directly, sharply reducing the engineering involvement needed for tuning and changes.</li>
+          <li>Built three playable game-mode prototypes in four months, extending existing systems and building new ones while pushing legacy code to its limits without compromising stability.</li>
+          <li>Collaborated with Art and Design to shape the tutorial and first-time player experience, using iterative playtesting and player-feedback analysis to surface friction points and smooth onboarding.</li>
+          <li>Redesigned input control to enable dynamic, runtime-configurable input processing while remaining on the legacy Unreal input system.</li>
+          <li>Added full input remapping with non-QWERTY keyboard support, improving accessibility and making controls more intuitive for players.</li>
+          <li>Built and maintained standardised testing environments for gameplay systems, enabling reliable bug reproduction and faster debugging of in-production features.</li>
+        </ul>
+      </div>
+      <div class="timeline-item">
+        <div class="meta">Jul 2020 — Jul 2023</div>
+        <h3>UI/Gameplay Programmer</h3>
+        <div class="studio">Lesta Games · unannounced AAA PvPvE Extraction Shooter (PC/Console)</div>
+        <ul>
+          <li>Re-architected the ping system for performance and maintainability: streamlined client-server communication, introduced a scalable configuration framework that cut config complexity by 70%, and eliminated redundant server-to-client notifications.</li>
+          <li>Established MVC as the project's standard UI architecture, decoupling presentation from business logic to stabilise the UI layer during active development and significantly reduce unplanned maintenance.</li>
+          <li>Implemented game-wide deterministic random seeding, enabling reliable reproduction of any in-game scenario and significantly accelerating bug investigation.</li>
+          <li>Designed a settings plugin providing centralised control over in-game parameters, with an API that auto-generates UI for new settings without manual wiring.</li>
+        </ul>
+      </div>
+      <div class="timeline-item">
+        <div class="meta">Nov 2019 — Jun 2020</div>
+        <h3>Gameplay/UI Programmer</h3>
+        <div class="studio">Social Quantum · Magic High — Match-3 (iOS/Android, discontinued)</div>
+        <ul>
+          <li>Implemented responsive UI layouts optimised for the full spectrum of mobile resolutions and aspect ratios.</li>
+          <li>Refactored the flipbook animation system, reducing per-frame overhead and improving overall performance.</li>
+        </ul>
+      </div>
+      <div class="timeline-item">
+        <div class="meta">Feb 2019 — Nov 2019</div>
+        <h3>C++ Programmer</h3>
+        <div class="studio">Alawar · Watchers — Battle Royale Shooter (PC, discontinued)</div>
+        <ul>
+          <li>Shipped a battle pass feature end to end — UI visuals, client-side state logic, and backend integration — delivering a core monetisation and engagement system.</li>
+          <li>Prototyped a range of gameplay objects, including weapons and environmental hazards, taking the strongest concepts through to production quality.</li>
+        </ul>
+      </div>
+      <div class="timeline-item">
+        <div class="meta">May 2018 — Oct 2018</div>
+        <h3>C++ Programmer</h3>
+        <div class="studio">3D Forge · T-Man Journey — Sidescroller Runner (Android, discontinued)</div>
+        <ul>
+          <li>Designed and implemented a chunk-based procedural generation system for infinite levels, handling runtime streaming, content variety, and seamless transitions between chunks.</li>
+          <li>Built character traversal systems spanning movement logic, animation blueprints, and collision detection.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="container">
+    <h2><span class="idx">05.</span>education</h2>
+    <div class="edu-item">
+      <div>
+        <h3>Bachelor of Electrical and Electronics Engineering</h3>
+        <div class="studio">Altai State Technical University — Barnaul, Russia</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact-section">
+  <div class="container">
+    <h2><span class="idx">06.</span>contact</h2>
+    <p>Open to gameplay programming opportunities. Reach out to talk shop, review a build, or discuss a role.</p>
+    <a class="btn" href="mailto:gusarcukyana@gmail.com">say_hello()</a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    // © <span id="year"></span> Iana Gusarchuk — Guildford, United Kingdom.
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
