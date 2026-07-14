@@ -7,21 +7,38 @@
 <meta name="description" content="Portfolio of Iana Gusarchuk — Gameplay Programmer. Unreal Engine 4/5, ECS/Mass Entity, Gameplay Ability System, data-driven gameplay frameworks.">
 <style>
   :root {
-    --bg: #faf8f5;
-    --bg-alt: #f2eef7;
-    --card: #ffffff;
-    --text: #2a2733;
-    --text-muted: #63606f;
-    --text-dim: #9791a3;
-    --accent: #5b4fc4;
-    --accent-dim: rgba(91, 79, 196, 0.10);
-    --accent2: #973f78;
-    --border: #e4dff0;
+    --bg: #0e0c14;
+    --bg-alt: #15121f;
+    --card: #171420;
+    --text: #ece9f5;
+    --text-muted: #b0a8c9;
+    --text-dim: #4a4359;
+    --accent: #9b8cf0;
+    --accent-dim: rgba(155, 140, 240, 0.14);
+    --accent2: #e28ac0;
+    --border: #2a2438;
     --scrim: #1a1723;
     --on-scrim: #f5f3fa;
+    --nav-bg: rgba(14, 12, 20, 0.92);
     --mono: "JetBrains Mono", "Fira Code", "SFMono-Regular", Consolas, "Courier New", monospace;
     --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --max-width: 980px;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #faf8f5;
+      --bg-alt: #f2eef7;
+      --card: #ffffff;
+      --text: #2a2733;
+      --text-muted: #63606f;
+      --text-dim: #9791a3;
+      --accent: #5b4fc4;
+      --accent-dim: rgba(91, 79, 196, 0.10);
+      --accent2: #973f78;
+      --border: #e4dff0;
+      --nav-bg: rgba(250, 248, 245, 0.92);
+    }
   }
 
   * { box-sizing: border-box; }
@@ -189,7 +206,7 @@
   nav.tabs {
     position: sticky;
     top: 0;
-    background: rgba(250, 248, 245, 0.92);
+    background: var(--nav-bg);
     backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--border);
     z-index: 10;
@@ -567,9 +584,6 @@
     text-align: center;
   }
 
-  .contact-section h2 { justify-content: center; }
-  .contact-section h2::after { display: none; }
-
   .contact-section p {
     color: var(--text-muted);
     max-width: 520px;
@@ -651,14 +665,15 @@
   <div class="container">
     <h2 id="about-heading"><span class="idx" aria-hidden="true">01.</span>about</h2>
     <p class="about-text" style="color: var(--text-muted); max-width: 700px; font-size: 1.02rem;">
-      I've spent 8+ years designing and shipping gameplay systems across AAA and indie
-      productions — from data-driven projectile and ability systems on Unreal Engine 5's
-      Mass Entity (ECS) framework, to modular game-scenario tooling that lets designers
-      iterate without engineering bottlenecks. I'm comfortable bootstrapping architecture
-      on proprietary engines as well as owning production features on established Unreal
-      pipelines. Outside of work, I build engine-level systems from scratch — a hand-rolled
-      C++20 engine with test-first AI (state machines, A*, steering) and an ECS RPG layer —
-      as personal professional development, and sometimes participate in game jams.
+      Hello! I'm Iana, a self-taught gameplay programmer with 8+ years of experience in
+      game development. I've contributed to AAA productions as well as smaller mobile
+      titles, working across the full range from early architectural groundwork to
+      production-ready features — data-driven gameplay systems, ECS architectures, and
+      Unreal's Gameplay Ability System among them. Outside of work, I like to keep
+      sharpening my skills and learning something new — including building my own
+      C++ game engine, complete with test-first AI, from scratch — and I take part in
+      game jams from time to time, tinkering in Unity and Unreal alike. I'm passionate
+      about games, and I always aim to bring my best-quality work to whatever I'm building.
     </p>
   </div>
 </section>
@@ -910,9 +925,9 @@
 <section id="contact" class="contact-section" aria-labelledby="contact-heading">
   <div class="container">
     <h2 id="contact-heading"><span class="idx" aria-hidden="true">06.</span>contact</h2>
-    <p>Open to gameplay programming opportunities. Reach out to talk shop, review a build, or discuss a role.</p>
+    <p>Open to programming opportunities. Reach out to talk shop, review a build, or discuss a role.</p>
     <div class="btn-group">
-      <a class="btn" href="mailto:gusarcukyana@gmail.com">say_hello()</a>
+      <a class="btn" href="mailto:gusarcukyana@gmail.com">Email</a>
       <a class="btn" href="https://www.linkedin.com/in/i-gusarchuk/" target="_blank" rel="noopener">LinkedIn</a>
     </div>
   </div>
