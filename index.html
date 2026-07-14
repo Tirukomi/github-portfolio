@@ -7,16 +7,18 @@
 <meta name="description" content="Portfolio of Iana Gusarchuk — Gameplay Programmer. Unreal Engine 4/5, ECS/Mass Entity, Gameplay Ability System, data-driven gameplay frameworks.">
 <style>
   :root {
-    --bg: #090b0f;
-    --bg-alt: #0f131a;
-    --card: #10141c;
-    --text: #d7dde5;
-    --text-muted: #6d7787;
-    --text-dim: #4a5361;
-    --accent: #39ff9d;
-    --accent-dim: rgba(57, 255, 157, 0.12);
-    --accent2: #ffb454;
-    --border: #1e2530;
+    --bg: #faf8f5;
+    --bg-alt: #f2eef7;
+    --card: #ffffff;
+    --text: #2a2733;
+    --text-muted: #63606f;
+    --text-dim: #9791a3;
+    --accent: #5b4fc4;
+    --accent-dim: rgba(91, 79, 196, 0.10);
+    --accent2: #973f78;
+    --border: #e4dff0;
+    --scrim: #1a1723;
+    --on-scrim: #f5f3fa;
     --mono: "JetBrains Mono", "Fira Code", "SFMono-Regular", Consolas, "Courier New", monospace;
     --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --max-width: 980px;
@@ -29,7 +31,7 @@
     margin: 0;
     font-family: var(--sans);
     background:
-      linear-gradient(rgba(57, 255, 157, 0.025) 1px, transparent 1px) 0 0 / 100% 28px,
+      linear-gradient(rgba(91, 79, 196, 0.035) 1px, transparent 1px) 0 0 / 100% 28px,
       var(--bg);
     color: var(--text);
     line-height: 1.6;
@@ -37,6 +39,40 @@
 
   a { color: var(--accent); text-decoration: none; }
   a:hover { text-decoration: underline; }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 16px;
+    top: -60px;
+    background: var(--accent);
+    color: var(--on-scrim);
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 10px 18px;
+    border-radius: 4px;
+    z-index: 100;
+    transition: top 0.2s;
+  }
+
+  .skip-link:focus {
+    top: 16px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
 
   .container {
     max-width: var(--max-width);
@@ -126,7 +162,7 @@
     color: var(--text-muted);
   }
 
-  .contact-line span { color: var(--text-dim); }
+  .contact-line span { color: var(--text-muted); }
 
   .social-links {
     display: flex;
@@ -153,7 +189,7 @@
   nav.tabs {
     position: sticky;
     top: 0;
-    background: rgba(9, 11, 15, 0.92);
+    background: rgba(250, 248, 245, 0.92);
     backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--border);
     z-index: 10;
@@ -292,7 +328,7 @@
   .project-card:hover {
     transform: translateY(-3px);
     border-color: var(--accent);
-    box-shadow: 0 8px 24px rgba(57, 255, 157, 0.08);
+    box-shadow: 0 8px 24px rgba(91, 79, 196, 0.14);
   }
 
   .project-card:hover::before { opacity: 1; }
@@ -314,7 +350,7 @@
   .project-card .project-studio {
     font-family: var(--mono);
     font-size: 0.76rem;
-    color: var(--text-dim);
+    color: var(--text-muted);
     margin-bottom: 10px;
   }
 
@@ -339,6 +375,15 @@
     background: var(--accent-dim);
     padding: 3px 8px;
     border-radius: 3px;
+  }
+
+  .project-links {
+    display: flex;
+    gap: 16px;
+    margin-top: 12px;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    font-weight: 600;
   }
 
   .projects-subsection + .projects-subsection {
@@ -375,30 +420,37 @@
   .project-card--image h3,
   .project-card--image .project-studio,
   .project-card--image p {
+    color: var(--on-scrim);
     text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+  }
+
+  .project-card--image .project-tags span {
+    background: rgba(26, 23, 35, 0.55);
+    color: var(--on-scrim);
+    border-color: rgba(245, 243, 250, 0.35);
   }
 
   .project-card--image.bg-steel-hunters {
     background-image:
-      linear-gradient(180deg, rgba(9,11,15,0.55) 0%, rgba(9,11,15,0.88) 65%, var(--card) 100%),
+      linear-gradient(180deg, rgba(26,23,35,0.55) 0%, rgba(26,23,35,0.85) 65%, rgba(26,23,35,0.92) 100%),
       url("assets/steel-hunters.jpg");
   }
 
   .project-card--image.bg-magic-high {
     background-image:
-      linear-gradient(180deg, rgba(9,11,15,0.55) 0%, rgba(9,11,15,0.88) 65%, var(--card) 100%),
+      linear-gradient(180deg, rgba(26,23,35,0.55) 0%, rgba(26,23,35,0.85) 65%, rgba(26,23,35,0.92) 100%),
       url("assets/magic-high.jpg");
   }
 
   .project-card--image.bg-watchers {
     background-image:
-      linear-gradient(180deg, rgba(9,11,15,0.55) 0%, rgba(9,11,15,0.88) 65%, var(--card) 100%),
+      linear-gradient(180deg, rgba(26,23,35,0.55) 0%, rgba(26,23,35,0.85) 65%, rgba(26,23,35,0.92) 100%),
       url("assets/watchers.png");
   }
 
   .project-card--image.bg-t-man-journey {
     background-image:
-      linear-gradient(180deg, rgba(9,11,15,0.55) 0%, rgba(9,11,15,0.88) 65%, var(--card) 100%),
+      linear-gradient(180deg, rgba(26,23,35,0.55) 0%, rgba(26,23,35,0.85) 65%, rgba(26,23,35,0.92) 100%),
       url("assets/t-man-journey.jpg");
   }
 
@@ -442,7 +494,7 @@
   }
 
   .timeline-item .studio {
-    color: var(--text-dim);
+    color: var(--text-muted);
     font-size: 0.85rem;
     margin-bottom: 10px;
   }
@@ -471,7 +523,7 @@
   }
 
   .edu-item .studio {
-    color: var(--text-dim);
+    color: var(--text-muted);
     font-size: 0.85rem;
   }
 
@@ -499,7 +551,7 @@
   .btn {
     display: inline-block;
     background: var(--accent);
-    color: #06110a;
+    color: var(--on-scrim);
     padding: 12px 28px;
     border-radius: 4px;
     font-family: var(--mono);
@@ -515,7 +567,7 @@
   footer {
     text-align: center;
     padding: 32px 0;
-    color: var(--text-dim);
+    color: var(--text-muted);
     font-family: var(--mono);
     font-size: 0.78rem;
   }
@@ -530,11 +582,13 @@
 </head>
 <body>
 
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
 <header class="hero">
   <div class="container">
-    <p class="hero-tag">whoami<span class="cursor"></span></p>
-    <h1>Iana Gusarchuk<span class="accent">.</span></h1>
-    <p class="role">Gameplay Programmer<span class="sep">//</span>8+ years shipping PC, console &amp; mobile titles</p>
+    <p class="hero-tag">whoami<span class="cursor" aria-hidden="true"></span></p>
+    <h1>Iana Gusarchuk<span class="accent" aria-hidden="true">.</span></h1>
+    <p class="role">Gameplay Programmer<span class="sep" aria-hidden="true">//</span>8+ years shipping PC, console &amp; mobile titles</p>
     <p class="hero-summary">
       Gameplay programmer with 8+ years of experience shipping PC, console, and mobile
       titles across multiple genres. Proven track record of designing data-driven gameplay
@@ -552,7 +606,7 @@
     </div>
     <div class="contact-line">
       <span>Location</span> Guildford, United Kingdom
-      <span>Phone</span> +44 7835 808444
+      <span>Phone</span> <a href="tel:+447835808444">+44 7835 808444</a>
     </div>
     <div class="social-links">
       <a href="https://www.linkedin.com/in/i-gusarchuk/" target="_blank" rel="noopener">LinkedIn</a>
@@ -561,7 +615,7 @@
   </div>
 </header>
 
-<nav class="tabs">
+<nav class="tabs" aria-label="Section navigation">
   <div class="container">
     <a href="#about">about</a>
     <a href="#skills">skills</a>
@@ -572,9 +626,11 @@
   </div>
 </nav>
 
-<section id="about">
+<main id="main-content">
+
+<section id="about" aria-labelledby="about-heading">
   <div class="container">
-    <h2><span class="idx">01.</span>about</h2>
+    <h2 id="about-heading"><span class="idx" aria-hidden="true">01.</span>about</h2>
     <p class="about-text" style="color: var(--text-muted); max-width: 700px; font-size: 1.02rem;">
       8+ years designing and shipping gameplay systems across AAA and indie productions —
       from data-driven projectile and ability systems on Unreal Engine 5's Mass Entity
@@ -585,9 +641,9 @@
   </div>
 </section>
 
-<section id="skills">
+<section id="skills" aria-labelledby="skills-heading">
   <div class="container">
-    <h2><span class="idx">02.</span>skills</h2>
+    <h2 id="skills-heading"><span class="idx" aria-hidden="true">02.</span>skills</h2>
     <div class="skills-grid">
       <div class="skill-group">
         <h4>Languages</h4>
@@ -627,9 +683,9 @@
   </div>
 </section>
 
-<section id="projects">
+<section id="projects" aria-labelledby="projects-heading">
   <div class="container">
-    <h2><span class="idx">03.</span>projects</h2>
+    <h2 id="projects-heading"><span class="idx" aria-hidden="true">03.</span>projects</h2>
 
     <div class="projects-subsection">
       <div class="projects-subheading">Professional Projects</div>
@@ -687,12 +743,19 @@
       <div class="project-grid">
         <div class="project-card personal">
           <div class="project-role">Personal Project</div>
-          <h3>Project Name</h3>
-          <div class="project-studio">Engine / Platform — Year</div>
-          <p>Add a short description of a personal project, game jam entry, or side experiment — what it does and what you built or explored.</p>
+          <h3>LightYears</h3>
+          <div class="project-studio">Hand-Rolled C++20 Engine — 2025–2026</div>
+          <p>A 2D space-shooter built on a hand-rolled C++20 engine. Beyond the arcade gameplay, it implements reusable, test-first systems: a generic state machine, grid pathfinding (A*) and steering AI, an ECS-based RPG layer (EnTT) for stats/levels/loot, data-driven balancing, audio, animation, and an in-engine debug overlay — 91 doctest cases / 4286 assertions, with CI running configure/build/test on every push.</p>
           <div class="project-tags">
-            <span>Tech</span>
-            <span>Tech</span>
+            <span>C++20</span>
+            <span>Custom Engine</span>
+            <span>ECS (EnTT)</span>
+            <span>A* / Steering AI</span>
+            <span>SFML</span>
+            <span>Box2D</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/Tirukomi/LightYears" target="_blank" rel="noopener">Source</a>
           </div>
         </div>
         <div class="project-card personal">
@@ -710,9 +773,9 @@
   </div>
 </section>
 
-<section id="experience">
+<section id="experience" aria-labelledby="experience-heading">
   <div class="container">
-    <h2><span class="idx">04.</span>experience</h2>
+    <h2 id="experience-heading"><span class="idx" aria-hidden="true">04.</span>experience</h2>
     <div class="timeline">
       <div class="timeline-item">
         <div class="meta">Aug 2025 — Present</div>
@@ -781,9 +844,9 @@
   </div>
 </section>
 
-<section id="education">
+<section id="education" aria-labelledby="education-heading">
   <div class="container">
-    <h2><span class="idx">05.</span>education</h2>
+    <h2 id="education-heading"><span class="idx" aria-hidden="true">05.</span>education</h2>
     <div class="edu-item">
       <div>
         <h3>Bachelor of Electrical and Electronics Engineering</h3>
@@ -793,13 +856,15 @@
   </div>
 </section>
 
-<section id="contact" class="contact-section">
+<section id="contact" class="contact-section" aria-labelledby="contact-heading">
   <div class="container">
-    <h2><span class="idx">06.</span>contact</h2>
+    <h2 id="contact-heading"><span class="idx" aria-hidden="true">06.</span>contact</h2>
     <p>Open to gameplay programming opportunities. Reach out to talk shop, review a build, or discuss a role.</p>
     <a class="btn" href="mailto:gusarcukyana@gmail.com">say_hello()</a>
   </div>
 </section>
+
+</main>
 
 <footer>
   <div class="container">
