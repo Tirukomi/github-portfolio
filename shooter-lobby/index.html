@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TASKFORCE // NX — Lobby Demo</title>
+<meta name="description" content="A web-based shooter lobby GUI demo — Battle, Loadout, Battle Pass, and Shop tabs.">
+<style>
+  :root {
+    --bg: #0a0b0e;
+    --bg-2: #0f1115;
+    --panel: #15181e;
+    --panel-2: #1b1f27;
+    --panel-3: #232833;
+    --line: #2c313b;
+    --line-bright: #3a414d;
+    --text: #eef1f5;
+    --muted: #9aa2ad;
+    --dim: #626a76;
+    --accent: #ff9e2c;
+    --accent-hot: #ff7a00;
+    --accent-glow: rgba(255, 158, 44, 0.28);
+    --blue: #38b6ff;
+    --gold: #ffd15c;
+    --green: #7ed957;
+    --red: #ff5757;
+    --purple: #b06bff;
+
+    --display: "Arial Narrow", "Roboto Condensed", "Oswald", "Bebas Neue", system-ui, sans-serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 100%; overflow: hidden; }
+
+  body {
+    font-family: var(--sans);
+    background:
+      radial-gradient(1200px 600px at 70% -10%, rgba(255, 158, 44, 0.06), transparent 60%),
+      linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px) 0 0 / 100% 30px,
+      var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection { background: var(--accent); color: #12130f; }
+
+  /* ---------- App shell ---------- */
+  .app {
+    height: 100vh;
+    height: 100dvh;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    overflow: hidden;
+  }
+
+  /* ---------- Utility ---------- */
+  .svg-ico {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    background-color: currentColor;
+    -webkit-mask: var(--ico) center / contain no-repeat;
+    mask: var(--ico) center / contain no-repeat;
+    vertical-align: -0.08em;
+  }
+  .cut {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+  }
+  .cut-tl {
+    clip-path: polygon(12px 0, 100% 0, 100% 100%, 0 100%, 0 12px);
+  }
+  .eyebrow {
+    font-family: var(--display);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.72rem;
+    color: var(--accent);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 3px;
+    height: 13px;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent-glow);
+  }
+  .hazard {
+    background-image: repeating-linear-gradient(
+      -30deg, var(--accent) 0 10px, #0a0b0e 10px 20px);
+    opacity: 0.5;
+  }
+
+  /* ---------- Top bar ---------- */
+  .topbar {
+    display: flex;
+    align-items: stretch;
+    gap: 18px;
+    padding: 12px 22px;
+    background: linear-gradient(180deg, rgba(20, 23, 29, 0.96), rgba(15, 17, 21, 0.9));
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(6px);
+  }
+
+  .player {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+  .avatar {
+    width: 46px;
+    height: 46px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-hot));
+    display: grid;
+    place-items: center;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.35rem;
+    color: #14130d;
+    clip-path: polygon(0 0, 100% 0, 100% 70%, 82% 100%, 0 100%);
+    position: relative;
+  }
+  .avatar .lvl {
+    position: absolute;
+    bottom: -6px;
+    right: -8px;
+    background: var(--panel-3);
+    border: 1px solid var(--line-bright);
+    color: var(--accent);
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 0.72rem;
+    padding: 1px 6px;
+    letter-spacing: 0.05em;
+  }
+  .player .callsign {
+    font-family: var(--display);
+    font-size: 1.28rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+  .player .rank {
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+  .player .rank b { color: var(--gold); }
+
+  /* Nav tabs */
+  nav.tabs {
+    display: flex;
+    align-items: stretch;
+    gap: 2px;
+    margin: 0 auto;
+  }
+  .tab {
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-family: var(--display);
+    text-transform: uppercase;
+    letter-spacing: 0.13em;
+    font-size: 1.05rem;
+    font-weight: 700;
+    padding: 8px 22px 6px;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    transition: color 0.15s;
+  }
+  .tab .num {
+    font-size: 0.66rem;
+    color: var(--dim);
+    border: 1px solid var(--line);
+    padding: 1px 5px;
+    letter-spacing: 0;
+  }
+  .tab::after {
+    content: "";
+    position: absolute;
+    left: 14px; right: 14px; bottom: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transition: transform 0.18s ease;
+    box-shadow: 0 0 12px var(--accent-glow);
+  }
+  .tab:hover { color: var(--text); }
+  .tab.is-active { color: var(--text); }
+  .tab.is-active::after { transform: scaleX(1); }
+  .tab.is-active .num { color: var(--accent); border-color: var(--accent); }
+
+  /* Currencies */
+  .wallet {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .coin {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    padding: 7px 12px 6px;
+    font-family: var(--display);
+    letter-spacing: 0.05em;
+  }
+  .coin .dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .coin.cp .dot { background: radial-gradient(circle at 35% 30%, #ffd98a, var(--accent)); }
+  .coin.sv .dot { background: radial-gradient(circle at 35% 30%, #9fe0ff, var(--blue)); }
+  .coin .val { font-size: 1.05rem; font-weight: 700; }
+  .coin .tag { font-size: 0.66rem; color: var(--muted); letter-spacing: 0.14em; }
+  .icon-btn {
+    width: 40px; height: 40px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    display: grid; place-items: center;
+    cursor: pointer;
+    font-size: 1.05rem;
+    transition: 0.15s;
+  }
+  .icon-btn:hover { color: var(--accent); border-color: var(--line-bright); }
+
+  /* ---------- Content ---------- */
+  .content {
+    padding: 20px 22px;
+    position: relative;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .tab-panel { flex: 1; min-height: 0; flex-direction: column; display: none; animation: fade 0.25s ease; }
+  .tab-panel.is-active { display: flex; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  .panel-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .panel-head h1 {
+    font-family: var(--display);
+    font-size: 2.4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 0.95;
+  }
+  .panel-head h1 span { color: var(--accent); }
+  .panel-head .sub { color: var(--muted); font-size: 0.86rem; margin-top: 4px; letter-spacing: 0.04em; }
+
+  /* ======================================================
+     BATTLE
+  ====================================================== */
+  .battle-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 18px;
+    flex: 1;
+    min-height: 0;
+  }
+  .mode-list { display: flex; flex-direction: column; gap: 8px; min-height: 0; overflow-y: auto; }
+  .mode {
+    text-align: left;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-left: 3px solid transparent;
+    color: var(--text);
+    padding: 13px 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    transition: 0.15s;
+  }
+  .mode:hover { background: var(--panel-2); border-left-color: var(--line-bright); }
+  .mode.is-active {
+    background: linear-gradient(90deg, rgba(255,158,44,0.14), transparent);
+    border-left-color: var(--accent);
+  }
+  .mode .glyph {
+    width: 38px; height: 38px;
+    background: var(--panel-3);
+    display: grid; place-items: center;
+    font-size: 20px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .mode.is-active .glyph { background: var(--accent); color: #14130d; }
+  .mode .m-name {
+    font-family: var(--display);
+    font-size: 1.12rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .mode .m-meta { font-size: 0.72rem; color: var(--muted); margin-top: 4px; letter-spacing: 0.06em; }
+
+  .hero {
+    position: relative;
+    background:
+      linear-gradient(180deg, rgba(10,11,14,0.15), rgba(10,11,14,0.92)),
+      linear-gradient(120deg, #243247, #10151d 60%);
+    border: 1px solid var(--line);
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 26px;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+  .hero::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0 1px, transparent 1px 44px);
+    pointer-events: none;
+  }
+  .hero .tagpill {
+    display: flex; gap: 8px; align-items: center;
+  }
+  .pill {
+    font-family: var(--display);
+    font-size: 0.74rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 5px 11px;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid var(--line-bright);
+    color: var(--text);
+  }
+  .pill.live { color: var(--green); }
+  .pill.live::before {
+    content: ""; display: inline-block;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--green); margin-right: 7px;
+    box-shadow: 0 0 8px var(--green);
+    animation: blink 1.4s steps(2, jump-none) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0.3; } }
+
+  .hero h2 {
+    font-family: var(--display);
+    font-size: 3.4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    line-height: 0.9;
+    text-shadow: 0 4px 24px rgba(0,0,0,0.6);
+  }
+  .hero .map { color: var(--accent); font-family: var(--display); letter-spacing: 0.14em; text-transform: uppercase; margin-top: 8px; font-size: 1rem; }
+  .hero .stats { display: flex; gap: 26px; margin: 18px 0 22px; flex-wrap: wrap; }
+  .hero .stat .k { font-family: var(--display); font-size: 1.6rem; font-weight: 700; }
+  .hero .stat .l { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.16em; text-transform: uppercase; }
+
+  .hero-corner {
+    position: absolute;
+    right: 22px;
+    bottom: 22px;
+    width: 460px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 5;
+  }
+  .hero-overlay {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+    background: rgba(10, 11, 14, 0.58);
+    border: 1px solid var(--line-bright);
+    backdrop-filter: blur(4px);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%);
+  }
+  .hero-overlay h2 { font-size: 1.5rem; }
+  .hero-overlay .map { font-size: 0.6rem; }
+  .hero-overlay .stats { margin: 2px 0; gap: 20px; }
+  .hero-overlay .deploy-row { margin-top: auto; }
+
+  .deploy-row { display: flex; gap: 10px; align-items: center; }
+  .deploy-row .ghost-btn { flex: 1; text-align: center; }
+  .deploy {
+    width: 100%;
+    height: 132px;
+    appearance: none; border: none; cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--display);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    padding: 0 18px;
+    color: #14130d;
+    background: linear-gradient(120deg, var(--gold), var(--accent) 55%, var(--accent-hot));
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%);
+    box-shadow: 0 0 0 1px rgba(255,158,44,0.4), 0 10px 34px rgba(255,122,0,0.30);
+    transition: filter 0.15s, transform 0.1s;
+    z-index: 5;
+  }
+  .deploy:hover { filter: brightness(1.08); }
+  .deploy:active { transform: translateY(1px); }
+  .ghost-btn {
+    font-family: var(--display);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-size: 0.95rem;
+    background: var(--panel-2);
+    color: var(--text);
+    border: 1px solid var(--line-bright);
+    padding: 13px 22px;
+    cursor: pointer;
+    transition: 0.15s;
+  }
+  .ghost-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ======================================================
+     LOADOUT
+  ====================================================== */
+  .loadout-grid { display: grid; grid-template-columns: 300px 1fr; gap: 18px; flex: 1; min-height: 0; }
+  .class-list { display: flex; flex-direction: column; gap: 8px; min-height: 0; overflow-y: auto; }
+  .klass {
+    text-align: left; cursor: pointer;
+    background: var(--panel); border: 1px solid var(--line);
+    padding: 12px 14px; color: var(--text);
+    display: flex; align-items: center; justify-content: space-between;
+    transition: 0.15s;
+  }
+  .klass:hover { background: var(--panel-2); }
+  .klass.is-active { border-color: var(--accent); background: linear-gradient(90deg, rgba(255,158,44,0.12), transparent); }
+  .klass .kn { font-family: var(--display); font-size: 1.15rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; }
+  .klass .kt { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .klass .chev { color: var(--dim); }
+  .klass.is-active .chev { color: var(--accent); }
+
+  .loadout-detail { background: var(--panel); border: 1px solid var(--line); padding: 22px; min-height: 0; overflow-y: auto; }
+  .primary-weapon {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    padding-bottom: 18px; margin-bottom: 18px; border-bottom: 1px solid var(--line);
+    flex-wrap: wrap; gap: 16px;
+  }
+  .primary-weapon .wn { font-family: var(--display); font-size: 2.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; line-height: 0.95; }
+  .primary-weapon .wc { color: var(--accent); font-size: 0.8rem; letter-spacing: 0.14em; text-transform: uppercase; margin-top: 6px; }
+  .weapon-art {
+    font-size: 2.6rem;
+    color: var(--accent);
+    filter: drop-shadow(0 0 20px var(--accent-glow));
+  }
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px 26px; margin-bottom: 22px; }
+  .stat-bar .sl { display: flex; justify-content: space-between; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 5px; }
+  .stat-bar .sl b { color: var(--text); font-family: var(--display); font-size: 0.86rem; }
+  .track { height: 6px; background: var(--panel-3); overflow: hidden; }
+  .track > i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent-hot), var(--accent)); }
+
+  .slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .slot {
+    background: var(--panel-2); border: 1px solid var(--line);
+    padding: 12px; cursor: pointer; transition: 0.15s;
+  }
+  .slot:hover { border-color: var(--line-bright); background: var(--panel-3); }
+  .slot .st { font-size: 0.64rem; color: var(--dim); letter-spacing: 0.14em; text-transform: uppercase; }
+  .slot .sv { font-family: var(--display); font-size: 1.02rem; letter-spacing: 0.04em; text-transform: uppercase; margin-top: 5px; }
+  .slot .sv.empty { color: var(--dim); }
+
+  /* ======================================================
+     BATTLE PASS
+  ====================================================== */
+  .bp-banner {
+    background:
+      linear-gradient(90deg, rgba(10,11,14,0.9) 20%, rgba(10,11,14,0.2)),
+      linear-gradient(120deg, #3a2c12, #1a1710);
+    border: 1px solid var(--line);
+    padding: 24px 26px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 18px;
+    margin-bottom: 16px;
+    position: relative; overflow: hidden;
+  }
+  .bp-progress { min-width: 260px; flex: 1; max-width: 460px; }
+  .bp-progress .row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 7px; }
+  .bp-progress .tiernow { font-family: var(--display); font-size: 1.05rem; letter-spacing: 0.06em; }
+  .bp-progress .tiernow b { color: var(--accent); font-size: 1.6rem; }
+  .bp-progress .xp { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.08em; }
+  .xpbar { height: 10px; background: var(--panel-3); border: 1px solid var(--line); overflow: hidden; }
+  .xpbar > i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent-hot), var(--gold)); box-shadow: 0 0 14px var(--accent-glow); }
+  .bp-buy {
+    font-family: var(--display); text-transform: uppercase; letter-spacing: 0.1em;
+    font-size: 1rem; color: #14130d; cursor: pointer; border: none;
+    background: linear-gradient(120deg, var(--gold), var(--accent));
+    padding: 13px 26px 11px;
+  }
+
+  .bp-legend { display: flex; gap: 18px; margin-bottom: 12px; font-size: 0.72rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; flex-wrap: wrap; }
+  .bp-legend span { display: flex; align-items: center; gap: 7px; }
+  .swatch { width: 12px; height: 12px; display: inline-block; }
+  .swatch.free { background: var(--panel-3); border: 1px solid var(--line-bright); }
+  .swatch.prem { background: var(--accent); }
+  .swatch.done { background: var(--green); }
+
+  .bp-track {
+    display: flex; gap: 8px; overflow-x: auto; padding: 6px 2px 16px;
+    scroll-snap-type: x proximity;
+  }
+  .bp-track::-webkit-scrollbar { height: 10px; }
+  .bp-track::-webkit-scrollbar-thumb { background: var(--line-bright); }
+  .bp-track::-webkit-scrollbar-track { background: var(--panel); }
+  .bp-cell {
+    flex: 0 0 96px; scroll-snap-align: start;
+    background: var(--panel); border: 1px solid var(--line);
+    display: flex; flex-direction: column; align-items: stretch; text-align: center;
+  }
+  .bp-cell .bp-reward {
+    height: 66px; display: grid; place-items: center; font-size: 1.7rem;
+    color: var(--text);
+    position: relative;
+  }
+  .bp-cell .bp-reward.premium { background: var(--panel-2); }
+  .bp-cell .bp-reward.free { background: var(--bg-2); border-top: 1px solid var(--line); }
+  .bp-cell .bp-tier {
+    font-family: var(--display); font-weight: 700; letter-spacing: 0.05em;
+    padding: 4px 0; background: var(--panel-3); font-size: 0.95rem;
+  }
+  .bp-cell.claimed .bp-reward.premium,
+  .bp-cell.claimed .bp-reward.free { opacity: 0.4; }
+  .bp-cell.claimed .bp-tier { color: var(--green); }
+  .bp-cell.claimed .bp-reward.premium::after {
+    content: "✓"; position: absolute; top: 4px; right: 6px; color: var(--green); font-size: 0.8rem;
+  }
+  .bp-cell.current { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 0 24px var(--accent-glow); }
+  .bp-cell.current .bp-tier { background: var(--accent); color: #14130d; }
+  .bp-cell.locked .bp-reward { opacity: 0.72; }
+  .bp-cell.locked .bp-tier { color: var(--muted); }
+  .bp-cell .lock { position: absolute; bottom: 4px; right: 6px; font-size: 0.7rem; opacity: 0.6; }
+
+  /* ======================================================
+     SHOP
+  ====================================================== */
+  .shop-featured {
+    background:
+      linear-gradient(90deg, rgba(10,11,14,0.92) 30%, rgba(10,11,14,0.1)),
+      linear-gradient(120deg, #2a1836, #14101d);
+    border: 1px solid var(--purple);
+    box-shadow: inset 0 0 60px rgba(176,107,255,0.12);
+    padding: 30px 28px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    min-height: 260px; margin-bottom: 18px; position: relative; overflow: hidden;
+  }
+  .shop-featured .rar { color: var(--purple); }
+  .shop-featured h2 { font-family: var(--display); font-size: 3rem; text-transform: uppercase; letter-spacing: 0.03em; line-height: 0.92; font-weight: 700; }
+  .shop-featured .desc { color: var(--muted); max-width: 460px; margin: 10px 0 18px; font-size: 0.9rem; }
+  .shop-featured .buy-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .price {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--display); font-size: 1.5rem; letter-spacing: 0.04em;
+  }
+  .price .dot { width: 16px; height: 16px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffd98a, var(--accent)); }
+  .price .old { color: var(--dim); text-decoration: line-through; font-size: 1rem; }
+
+  .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; }
+  .item {
+    background: var(--panel); border: 1px solid var(--line);
+    border-top: 3px solid var(--line-bright);
+    cursor: pointer; transition: 0.15s; position: relative;
+    display: flex; flex-direction: column;
+  }
+  .item:hover { transform: translateY(-3px); border-color: var(--line-bright); }
+  .item.legendary { border-top-color: var(--gold); }
+  .item.epic { border-top-color: var(--purple); }
+  .item.rare { border-top-color: var(--blue); }
+  .item .art {
+    height: 130px; display: grid; place-items: center; font-size: 3rem;
+    color: var(--text);
+    background: radial-gradient(circle at 50% 40%, var(--panel-3), var(--panel));
+  }
+  .item.legendary .art { color: var(--gold); background: radial-gradient(circle at 50% 40%, rgba(255,209,92,0.16), var(--panel)); }
+  .item.epic .art { color: var(--purple); background: radial-gradient(circle at 50% 40%, rgba(176,107,255,0.16), var(--panel)); }
+  .item.rare .art { color: var(--blue); background: radial-gradient(circle at 50% 40%, rgba(56,182,255,0.16), var(--panel)); }
+  .item .meta { padding: 12px 13px 14px; }
+  .item .r { font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; }
+  .item.legendary .r { color: var(--gold); }
+  .item.epic .r { color: var(--purple); }
+  .item.rare .r { color: var(--blue); }
+  .item .n { font-family: var(--display); font-size: 1.15rem; letter-spacing: 0.04em; text-transform: uppercase; margin: 4px 0 10px; line-height: 1; }
+  .item .p { display: flex; align-items: center; gap: 7px; font-family: var(--display); font-size: 1.15rem; }
+  .item .p .dot { width: 13px; height: 13px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffd98a, var(--accent)); }
+  .item .badge {
+    position: absolute; top: 10px; right: 0;
+    background: var(--accent); color: #14130d;
+    font-family: var(--display); font-size: 0.64rem; letter-spacing: 0.14em;
+    padding: 3px 10px; text-transform: uppercase;
+  }
+
+  /* ---------- Bottom bar ---------- */
+  .bottombar {
+    display: flex; align-items: center; gap: 16px;
+    padding: 12px 22px;
+    background: linear-gradient(0deg, rgba(20,23,29,0.96), rgba(15,17,21,0.85));
+    border-top: 1px solid var(--line);
+  }
+  .squad { display: flex; gap: 8px; }
+  .op {
+    width: 40px; height: 40px; background: var(--panel-2);
+    border: 1px solid var(--line); display: grid; place-items: center;
+    font-family: var(--display); color: var(--muted); font-size: 1.1rem;
+  }
+  .op.me { background: linear-gradient(135deg, var(--accent), var(--accent-hot)); color: #14130d; border-color: var(--accent); }
+  .op.empty { border-style: dashed; color: var(--dim); cursor: pointer; }
+  .op.empty:hover { color: var(--accent); border-color: var(--accent); }
+  .party-label { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .party-label b { color: var(--text); font-family: var(--display); font-size: 0.95rem; }
+  .conn { margin-left: auto; display: flex; align-items: center; gap: 18px; }
+  .ping { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; display: flex; align-items: center; gap: 7px; }
+  .ping b { color: var(--green); font-family: var(--display); }
+  .bars { display: inline-flex; gap: 2px; align-items: flex-end; height: 14px; }
+  .bars i { width: 3px; background: var(--green); }
+  .bars i:nth-child(1){height:5px} .bars i:nth-child(2){height:8px} .bars i:nth-child(3){height:11px} .bars i:nth-child(4){height:14px}
+
+  .draft-note {
+    text-align: center; padding: 10px; font-size: 0.72rem; color: var(--dim);
+    letter-spacing: 0.1em; text-transform: uppercase; border-top: 1px solid var(--line);
+    background: var(--bg-2);
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 1000px) {
+    .battle-grid, .loadout-grid { grid-template-columns: 1fr; }
+    nav.tabs { order: 3; width: 100%; overflow-x: auto; margin: 4px 0 0; justify-content: flex-start; }
+    .topbar { flex-wrap: wrap; }
+    .wallet { margin-left: auto; }
+  }
+  @media (max-width: 620px) {
+    .tab { padding: 8px 13px 6px; font-size: 0.92rem; }
+    .tab .num { display: none; }
+    .hero h2 { font-size: 2.3rem; }
+    .panel-head h1 { font-size: 1.8rem; }
+    .coin.sv { display: none; }
+    .hero-corner { position: static; width: auto; margin-top: 14px; }
+    .hero-overlay { height: auto; }
+    .deploy { height: 92px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ============ TOP BAR ============ -->
+  <header class="topbar">
+    <div class="player">
+      <div class="avatar">V<span class="lvl">87</span></div>
+      <div>
+        <div class="callsign">Viper-01</div>
+        <div class="rank">Prestige II · <b>Commander</b></div>
+      </div>
+    </div>
+
+    <nav class="tabs" role="tablist" aria-label="Lobby sections">
+      <button class="tab is-active" data-tab="battle" role="tab" aria-selected="true"><span class="num">1</span>Battle</button>
+      <button class="tab" data-tab="loadout" role="tab" aria-selected="false"><span class="num">2</span>Loadout</button>
+      <button class="tab" data-tab="battlepass" role="tab" aria-selected="false"><span class="num">3</span>Battle Pass</button>
+      <button class="tab" data-tab="shop" role="tab" aria-selected="false"><span class="num">4</span>Shop</button>
+    </nav>
+
+    <div class="wallet">
+      <div class="coin cp"><span class="dot"></span><span class="val">12,400</span><span class="tag">CP</span></div>
+      <div class="coin sv"><span class="dot"></span><span class="val">3,120</span><span class="tag">SALV</span></div>
+      <button class="icon-btn" title="Friends" aria-label="Friends"><span class="svg-ico" style="--ico:url('icons/friends.svg')"></span></button>
+      <button class="icon-btn" title="Settings" aria-label="Settings"><span class="svg-ico" style="--ico:url('icons/cog.svg')"></span></button>
+    </div>
+  </header>
+
+  <!-- ============ CONTENT ============ -->
+  <main class="content">
+
+    <!-- ---------- BATTLE ---------- -->
+    <section class="tab-panel is-active" id="battle" role="tabpanel">
+      <div class="panel-head">
+        <div>
+          <div class="eyebrow">Deployment</div>
+          <h1>Select <span>Contract</span></h1>
+          <div class="sub">Choose a playlist and deploy with your squad.</div>
+        </div>
+      </div>
+
+      <div class="battle-grid">
+        <div class="mode-list" id="modeList"><!-- rendered by JS --></div>
+
+        <div class="hero" id="hero">
+          <div class="hero-corner">
+            <div class="hero-overlay">
+              <div class="tagpill">
+                <span class="pill live">Live</span>
+                <span class="pill" id="heroPlaylist">SQUADS</span>
+              </div>
+              <h2 id="heroName">Battle Royale</h2>
+              <div class="map" id="heroMap">◈ Verdansk — Exclusion Zone</div>
+              <div class="stats">
+                <div class="stat"><div class="k" id="heroPlayers">150</div><div class="l">Operators</div></div>
+                <div class="stat"><div class="k" id="heroSquad">4</div><div class="l">Squad Size</div></div>
+                <div class="stat"><div class="k">~24m</div><div class="l">Avg Match</div></div>
+              </div>
+              <div class="deploy-row">
+                <button class="ghost-btn">Edit Squad</button>
+                <button class="ghost-btn">Playlist Info</button>
+              </div>
+            </div>
+            <button class="deploy" id="deployBtn">▶ Deploy</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- LOADOUT ---------- -->
+    <section class="tab-panel" id="loadout" role="tabpanel">
+      <div class="panel-head">
+        <div>
+          <div class="eyebrow">Gunsmith</div>
+          <h1>Combat <span>Loadouts</span></h1>
+          <div class="sub">Ten custom classes. Tune every slot before deployment.</div>
+        </div>
+      </div>
+
+      <div class="loadout-grid">
+        <div class="class-list" id="classList"><!-- rendered by JS --></div>
+        <div class="loadout-detail" id="loadoutDetail"><!-- rendered by JS --></div>
+      </div>
+    </section>
+
+    <!-- ---------- BATTLE PASS ---------- -->
+    <section class="tab-panel" id="battlepass" role="tabpanel">
+      <div class="panel-head">
+        <div>
+          <div class="eyebrow">Season 04</div>
+          <h1>Battle <span>Pass</span></h1>
+          <div class="sub">100 tiers of rewards. Premium track unlocks operators, blueprints &amp; CP.</div>
+        </div>
+      </div>
+
+      <div class="bp-banner">
+        <div class="bp-progress">
+          <div class="row">
+            <div class="tiernow">Tier <b>34</b> / 100</div>
+            <div class="xp">7,240 / 10,000 XP</div>
+          </div>
+          <div class="xpbar"><i style="width:72%"></i></div>
+        </div>
+        <button class="bp-buy">Upgrade Pass — 1,000 CP</button>
+      </div>
+
+      <div class="bp-legend">
+        <span><i class="swatch prem"></i> Premium Reward</span>
+        <span><i class="swatch free"></i> Free Reward</span>
+        <span><i class="swatch done"></i> Claimed</span>
+      </div>
+
+      <div class="bp-track" id="bpTrack"><!-- rendered by JS --></div>
+    </section>
+
+    <!-- ---------- SHOP ---------- -->
+    <section class="tab-panel" id="shop" role="tabpanel">
+      <div class="panel-head">
+        <div>
+          <div class="eyebrow">Store</div>
+          <h1>The <span>Armory</span></h1>
+          <div class="sub">Featured bundles rotate every 24 hours.</div>
+        </div>
+      </div>
+
+      <div class="shop-featured">
+        <div class="eyebrow rar">◆ Legendary Bundle · Featured</div>
+        <h2>Rogue Protocol</h2>
+        <p class="desc">Operator skin “Wraith”, two weapon blueprints, animated calling card, and 1,100 bonus CP.</p>
+        <div class="buy-row">
+          <span class="price"><span class="dot"></span> 2,400 <span class="old">2,800</span></span>
+          <button class="bp-buy">Purchase Bundle</button>
+        </div>
+      </div>
+
+      <div class="shop-grid" id="shopGrid"><!-- rendered by JS --></div>
+    </section>
+
+  </main>
+
+  <!-- ============ BOTTOM BAR ============ -->
+  <footer class="bottombar">
+    <div class="squad">
+      <div class="op me">V</div>
+      <div class="op">K</div>
+      <div class="op empty">+</div>
+      <div class="op empty">+</div>
+    </div>
+    <div class="party-label"><b>Fireteam</b><br>2 / 4 Ready</div>
+    <div class="conn">
+      <div class="ping">Server: NA-East · <b>18ms</b> <span class="bars"><i></i><i></i><i></i><i></i></span></div>
+    </div>
+  </footer>
+
+  <div class="draft-note">Draft — Prototype Lobby UI · Placeholder content, no live services</div>
+</div>
+
+<script>
+  /* ===================== DATA ===================== */
+  const MODES = [
+    { id: 'br',   glyph: 'skull',     name: 'Battle Royale', playlist: 'SQUADS', map: '◈ Verdansk — Exclusion Zone', players: 150, squad: 4, grad: 'linear-gradient(120deg, #243247, #10151d 60%)' },
+    { id: 'res',  glyph: 'respawn',   name: 'Resurgence',    playlist: 'QUADS',  map: '◈ Rebirth Island', players: 40,  squad: 4, grad: 'linear-gradient(120deg, #3a2740, #14101a 60%)' },
+    { id: 'plun', glyph: 'cash',      name: 'Plunder',       playlist: 'TRIOS',  map: '◈ Verdansk — Cash Grab', players: 50, squad: 3, grad: 'linear-gradient(120deg, #3a3417, #171510 60%)' },
+    { id: 'tdm',  glyph: 'crosshair', name: 'Team Deathmatch', playlist: '6V6',  map: '◈ Scrapyard', players: 12, squad: 6, grad: 'linear-gradient(120deg, #2a2f38, #12151b 60%)' },
+    { id: 'snd',  glyph: 'bomb',      name: 'Search & Destroy', playlist: '6V6', map: '◈ Terminal', players: 12, squad: 6, grad: 'linear-gradient(120deg, #33222a, #141013 60%)' },
+    { id: 'dom',  glyph: 'flag',      name: 'Domination',    playlist: '6V6',    map: '◈ Shipment 24/7', players: 12, squad: 6, grad: 'linear-gradient(120deg, #223a34, #101a16 60%)' },
+  ];
+
+  const CLASSES = [
+    { name: 'Ranger', type: 'Assault', weapon: 'MK-13 “Warden”', wclass: 'Assault Rifle', art: 'rifle',
+      stats: { Damage: 68, Range: 74, Accuracy: 80, 'Fire Rate': 62, Mobility: 55 },
+      slots: { Secondary: 'X12 Sidearm', Tactical: 'Stun Grenade', Lethal: 'Semtex', 'Perk 1': 'Scavenger', 'Perk 2': 'Ghost', 'Perk 3': 'Amped', 'Field Upgrade': 'Trophy System' } },
+    { name: 'Ghost', type: 'Recon / SMG', weapon: 'VP-9 “Whisper”', wclass: 'Submachine Gun', art: 'smg',
+      stats: { Damage: 54, Range: 42, Accuracy: 66, 'Fire Rate': 88, Mobility: 90 },
+      slots: { Secondary: 'Combat Knife', Tactical: 'Smoke', Lethal: 'Throwing Knife', 'Perk 1': 'Double Time', 'Perk 2': 'Cold-Blooded', 'Perk 3': 'Tracker', 'Field Upgrade': 'Dead Silence' } },
+    { name: 'Overwatch', type: 'Sniper', weapon: 'AX-50 “Longshot”', wclass: 'Sniper Rifle', art: 'sniper',
+      stats: { Damage: 95, Range: 98, Accuracy: 72, 'Fire Rate': 24, Mobility: 38 },
+      slots: { Secondary: '.357 Revolver', Tactical: 'Heartbeat Sensor', Lethal: 'Claymore', 'Perk 1': 'Overkill', 'Perk 2': 'Toughness', 'Perk 3': 'High Alert', 'Field Upgrade': 'Recon Drone' } },
+    { name: 'Breacher', type: 'CQB', weapon: 'R-870 “Kickback”', wclass: 'Shotgun', art: 'shotgun',
+      stats: { Damage: 90, Range: 26, Accuracy: 50, 'Fire Rate': 46, Mobility: 70 },
+      slots: { Secondary: 'Riot Shield', Tactical: 'Flashbang', Lethal: 'Thermite', 'Perk 1': 'E.O.D.', 'Perk 2': 'Battle Hardened', 'Perk 3': 'Shrapnel', 'Field Upgrade': 'Munitions Box' } },
+    { name: 'Demo', type: 'Support / LMG', weapon: 'M91 “Bulwark”', wclass: 'Light Machine Gun', art: 'lmg',
+      stats: { Damage: 74, Range: 82, Accuracy: 58, 'Fire Rate': 70, Mobility: 34 },
+      slots: { Secondary: 'X12 Sidearm', Tactical: 'Gas Grenade', Lethal: 'C4', 'Perk 1': 'Bomb Squad', 'Perk 2': 'Kill Chain', 'Perk 3': 'Birdseye', 'Field Upgrade': 'Deployable Cover' } },
+    { name: 'Medic', type: 'Support', weapon: 'FR-556 “Aidkit”', wclass: 'Assault Rifle', art: 'rifle',
+      stats: { Damage: 60, Range: 68, Accuracy: 84, 'Fire Rate': 66, Mobility: 60 },
+      slots: { Secondary: 'X12 Sidearm', Tactical: 'Stim', Lethal: 'Frag', 'Perk 1': 'Restock', 'Perk 2': 'Quick Fix', 'Perk 3': 'Combat Scout', 'Field Upgrade': 'Med Box' } },
+  ];
+
+  const SHOP = [
+    { name: 'Nightstalker', type: 'Weapon Blueprint', rarity: 'epic', price: 1200, art: 'knife', badge: 'NEW' },
+    { name: 'Ronin', type: 'Operator Skin', rarity: 'legendary', price: 1800, art: 'helmet', badge: '' },
+    { name: 'Tracer Pack: Ion', type: 'Blueprint', rarity: 'epic', price: 1100, art: 'bolt', badge: '' },
+    { name: 'Desert Fox', type: 'Vehicle Skin', rarity: 'rare', price: 600, art: 'vehicle', badge: '' },
+    { name: 'Warhound', type: 'Finishing Move', rarity: 'epic', price: 800, art: 'skull', badge: '' },
+    { name: 'Gold Standard', type: 'Weapon Camo', rarity: 'legendary', price: 1500, art: 'camo', badge: 'HOT' },
+    { name: 'Recon Bundle', type: 'Bundle', rarity: 'rare', price: 900, art: 'radar', badge: '' },
+    { name: 'Static Charge', type: 'Calling Card', rarity: 'rare', price: 300, art: 'card', badge: '' },
+  ];
+
+  const BP = { start: 25, count: 30, current: 34 };
+  const BP_ICONS = ['rifle','medal','shield','cash','bomb','helmet','crate','card','knife','camo','skull','radar'];
+  const ico = n => `<span class="svg-ico" style="--ico:url('icons/${n}.svg')"></span>`;
+
+  /* ===================== RENDER ===================== */
+  // Battle modes
+  const modeList = document.getElementById('modeList');
+  modeList.innerHTML = MODES.map((m, i) => `
+    <button class="mode${i === 0 ? ' is-active' : ''}" data-mode="${m.id}">
+      <span class="glyph">${ico(m.glyph)}</span>
+      <span>
+        <span class="m-name">${m.name}</span>
+        <span class="m-meta">${m.playlist} · ${m.players} operators</span>
+      </span>
+    </button>`).join('');
+
+  const hero = document.getElementById('hero');
+  function selectMode(id) {
+    const m = MODES.find(x => x.id === id);
+    document.getElementById('heroName').textContent = m.name;
+    document.getElementById('heroMap').textContent = m.map;
+    document.getElementById('heroPlaylist').textContent = m.playlist;
+    document.getElementById('heroPlayers').textContent = m.players;
+    document.getElementById('heroSquad').textContent = m.squad;
+    hero.style.background =
+      'linear-gradient(180deg, rgba(10,11,14,0.15), rgba(10,11,14,0.92)), ' + m.grad;
+    document.querySelectorAll('.mode').forEach(el => el.classList.toggle('is-active', el.dataset.mode === id));
+  }
+  modeList.querySelectorAll('.mode').forEach(el => el.addEventListener('click', () => selectMode(el.dataset.mode)));
+
+  document.getElementById('deployBtn').addEventListener('click', function () {
+    const orig = this.textContent;
+    this.textContent = '◌ Matchmaking…';
+    this.disabled = true;
+    setTimeout(() => { this.textContent = orig; this.disabled = false; }, 1800);
+  });
+
+  // Loadout classes
+  const classList = document.getElementById('classList');
+  classList.innerHTML = CLASSES.map((c, i) => `
+    <button class="klass${i === 0 ? ' is-active' : ''}" data-class="${i}">
+      <span>
+        <span class="kn">${c.name}</span><br>
+        <span class="kt">${c.type}</span>
+      </span>
+      <span class="chev">›</span>
+    </button>`).join('');
+
+  const detail = document.getElementById('loadoutDetail');
+  function renderLoadout(idx) {
+    const c = CLASSES[idx];
+    const statBars = Object.entries(c.stats).map(([k, v]) => `
+      <div class="stat-bar">
+        <div class="sl">${k} <b>${v}</b></div>
+        <div class="track"><i style="width:${v}%"></i></div>
+      </div>`).join('');
+    const slots = [['Primary', c.weapon], ...Object.entries(c.slots)].map(([k, v]) => `
+      <div class="slot">
+        <div class="st">${k}</div>
+        <div class="sv${v ? '' : ' empty'}">${v || 'Empty'}</div>
+      </div>`).join('');
+    detail.innerHTML = `
+      <div class="primary-weapon">
+        <div>
+          <div class="eyebrow">${c.type}</div>
+          <div class="wn">${c.weapon}</div>
+          <div class="wc">${c.wclass}</div>
+        </div>
+        <div class="weapon-art">${ico(c.art)}</div>
+      </div>
+      <div class="stats-grid">${statBars}</div>
+      <div class="slots">${slots}</div>`;
+    document.querySelectorAll('.klass').forEach((el, i) => el.classList.toggle('is-active', i === idx));
+  }
+  classList.querySelectorAll('.klass').forEach(el => el.addEventListener('click', () => renderLoadout(+el.dataset.class)));
+  renderLoadout(0);
+
+  // Battle pass track
+  const bpTrack = document.getElementById('bpTrack');
+  let bpHtml = '';
+  for (let i = 0; i < BP.count; i++) {
+    const tier = BP.start + i;
+    const state = tier < BP.current ? 'claimed' : tier === BP.current ? 'current' : 'locked';
+    const prem = BP_ICONS[(tier * 3) % BP_ICONS.length];
+    const free = tier % 2 === 0 ? BP_ICONS[(tier * 7) % BP_ICONS.length] : '';
+    bpHtml += `
+      <div class="bp-cell ${state}">
+        <div class="bp-reward premium">${ico(prem)}${state === 'locked' ? '<span class="lock">' + ico('lock') + '</span>' : ''}</div>
+        <div class="bp-tier">${tier}</div>
+        <div class="bp-reward free">${free ? ico(free) : ''}</div>
+      </div>`;
+  }
+  bpTrack.innerHTML = bpHtml;
+  // Scroll current tier into view
+  const cur = bpTrack.querySelector('.current');
+  if (cur) bpTrack.scrollLeft = cur.offsetLeft - 200;
+
+  // Shop grid
+  document.getElementById('shopGrid').innerHTML = SHOP.map(s => `
+    <div class="item ${s.rarity}">
+      ${s.badge ? `<span class="badge">${s.badge}</span>` : ''}
+      <div class="art">${ico(s.art)}</div>
+      <div class="meta">
+        <div class="r">${s.rarity} · ${s.type}</div>
+        <div class="n">${s.name}</div>
+        <div class="p"><span class="dot"></span>${s.price.toLocaleString()}</div>
+      </div>
+    </div>`).join('');
+
+  /* ===================== TABS ===================== */
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.tab-panel');
+  function activate(name) {
+    tabs.forEach(t => {
+      const on = t.dataset.tab === name;
+      t.classList.toggle('is-active', on);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    panels.forEach(p => p.classList.toggle('is-active', p.id === name));
+    document.querySelector('.content').scrollTop = 0;
+  }
+  tabs.forEach(t => t.addEventListener('click', () => activate(t.dataset.tab)));
+
+  // Number-key shortcuts 1–4
+  const order = ['battle', 'loadout', 'battlepass', 'shop'];
+  window.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    const n = parseInt(e.key, 10);
+    if (n >= 1 && n <= 4) activate(order[n - 1]);
+  });
+</script>
+</body>
+</html>
