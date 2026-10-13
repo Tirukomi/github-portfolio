@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Iana Gusarchuk — Gameplay Programmer</title>
-<meta name="description" content="Portfolio of Iana Gusarchuk — Gameplay Programmer. Unreal Engine 4/5, ECS/Mass Entity, Gameplay Ability System, data-driven gameplay frameworks.">
+<title>Iana Gusarchuk — UI/Gameplay Programmer</title>
+<meta name="description" content="Portfolio of Iana Gusarchuk — UI/Gameplay Programmer. Unreal Engine 4/5, UMG, Slate, ECS/Mass Entity, Gameplay Ability System, data-driven gameplay frameworks.">
 <style>
   :root {
     --bg: #0e0c14;
@@ -541,17 +541,7 @@
   .timeline-item .studio {
     color: var(--text-muted);
     font-size: 0.85rem;
-    margin-bottom: 10px;
   }
-
-  .timeline-item ul {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    margin: 0;
-    padding-left: 18px;
-  }
-
-  .timeline-item li { margin-bottom: 6px; }
 
   /* ---- Education ---- */
   .edu-item {
@@ -637,7 +627,7 @@
   <div class="container">
     <p class="hero-tag">whoami<span class="cursor" aria-hidden="true"></span></p>
     <h1>Iana Gusarchuk<span class="accent" aria-hidden="true">.</span></h1>
-    <p class="role">Gameplay Programmer<span class="sep" aria-hidden="true">//</span>8+ years shipping PC, console &amp; mobile titles</p>
+    <p class="role">UI/Gameplay Programmer<span class="sep" aria-hidden="true">//</span>8+ years shipping PC, console &amp; mobile titles</p>
     <div class="contact-line">
       <span>Location</span> Guildford, United Kingdom
     </div>
@@ -665,7 +655,7 @@
   <div class="container">
     <h2 id="about-heading"><span class="idx" aria-hidden="true">01.</span>about</h2>
     <p class="about-text" style="color: var(--text-muted); max-width: 700px; font-size: 1.02rem;">
-      Hello! I'm Iana, a gameplay programmer with 8+ years of experience in
+      Hello! I'm Iana, a UI/gameplay programmer with 8+ years of experience in
       game development. I've contributed to AAA productions as well as smaller mobile
       titles, working across the full range from early architectural groundwork to
       production-ready features — data-driven gameplay systems, ECS architectures, and
@@ -702,14 +692,31 @@
         </ul>
       </div>
       <div class="skill-group">
+        <h4>UI</h4>
+        <ul>
+          <li>UMG</li>
+          <li>Slate</li>
+          <li>MVC / MVVM</li>
+          <li>Responsive UI</li>
+          <li>Input &amp; Accessibility</li>
+          <li>Localisation</li>
+        </ul>
+      </div>
+      <div class="skill-group">
         <h4>Systems &amp; Architecture</h4>
         <ul>
           <li>ECS (Mass Entity, EnTT)</li>
           <li>Gameplay Ability System</li>
           <li>AI (State Machines, A*, Steering)</li>
-          <li>MVC UI Architecture</li>
-          <li>Responsive UI</li>
           <li>Data-Driven Frameworks</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <h4>Profiling</h4>
+        <ul>
+          <li>Unreal Insights</li>
+          <li>Unreal Stat Commands</li>
+          <li>Perfana</li>
         </ul>
       </div>
       <div class="skill-group">
@@ -743,7 +750,7 @@
       <div class="projects-subheading">Professional Projects</div>
       <div class="project-grid project-grid--2x2">
         <div class="project-card project-card--image bg-steel-hunters">
-          <div class="project-role">Gameplay Programmer · DPS Games</div>
+          <div class="project-role">UI/Gameplay Programmer · Wargaming</div>
           <h3>Steel Hunters</h3>
           <div class="project-studio">AAA PvPvE Extraction Shooter (PC) — Aug 2023 – Aug 2025</div>
           <p>Architected and owned a modular Game Scenario framework that let designers iterate on gameplay flow and content directly — sharply cutting the engineering effort needed for tuning and changes on a live AAA production.</p>
@@ -760,7 +767,7 @@
         <div class="project-card project-card--image bg-magic-high">
           <div class="project-role">Gameplay/UI Programmer · Social Quantum</div>
           <h3>Magic High</h3>
-          <div class="project-studio">Match-3, iOS / Android (discontinued) — Nov 2019 – Jun 2020</div>
+          <div class="project-studio">Match-3, iOS / Android — Nov 2019 – Jun 2020</div>
           <p>Built responsive UI layouts that held up cleanly across the full spectrum of mobile resolutions and aspect ratios, from budget phones to tablets.</p>
           <div class="project-tags">
             <span>C++</span>
@@ -771,7 +778,7 @@
         <div class="project-card project-card--image bg-watchers">
           <div class="project-role">C++ Programmer · Alawar</div>
           <h3>Watchers</h3>
-          <div class="project-studio">Battle Royale Shooter, PC (discontinued) — Feb 2019 – Nov 2019</div>
+          <div class="project-studio">Battle Royale Shooter, PC — Feb 2019 – Nov 2019</div>
           <p>Shipped an end-to-end battle pass — UI, client-side state, and backend integration — delivering the game's core monetisation and engagement system.</p>
           <div class="project-tags">
             <span>C++</span>
@@ -785,7 +792,7 @@
         <div class="project-card project-card--image bg-t-man-journey">
           <div class="project-role">C++ Programmer · 3D Forge</div>
           <h3>T-Man Journey</h3>
-          <div class="project-studio">Sidescroller Runner, Android (discontinued) — May 2018 – Oct 2018</div>
+          <div class="project-studio">Sidescroller Runner, Android — May 2018 – Oct 2018</div>
           <p>Designed a chunk-based procedural generation system for infinite levels, handling runtime streaming and seamless transitions between chunks.</p>
           <div class="project-tags">
             <span>C++</span>
@@ -871,67 +878,29 @@
     <h2 id="experience-heading"><span class="idx" aria-hidden="true">04.</span>experience</h2>
     <div class="timeline">
       <div class="timeline-item">
-        <div class="meta">Aug 2025 — Present</div>
-        <h3>Gameplay Programmer</h3>
-        <div class="studio">Wargaming · unannounced vehicular multiplayer game (PC/Console)</div>
-        <ul>
-          <li>Led the technical design and implementation of a data-driven projectile system on Unreal Engine 5's Mass Entity (ECS) framework, balancing flexibility, maintainability, and performance to sustain large numbers of concurrent entities.</li>
-          <li>Built modular, extensible player-character abilities using Unreal's Gameplay Ability System.</li>
-          <li>Bootstrapped early-stage development on a proprietary engine: mapping dependencies, authoring technical documentation, and shaping the initial architecture.</li>
-          <li>Coordinated with developers across multiple time zones to integrate gameplay systems, ensuring compatibility, stability, and efficient delivery of new features.</li>
-          <li>Collaborated with Project Managers and QA to keep the backlog prioritized and current, proactively surfacing tech debt and ensuring its prompt resolution.</li>
-        </ul>
-      </div>
-      <div class="timeline-item">
-        <div class="meta">Aug 2023 — Aug 2025</div>
-        <h3>Gameplay Programmer</h3>
-        <div class="studio">DPS Games · Steel Hunters — AAA PvPvE Extraction Shooter (PC)</div>
-        <ul>
-          <li>Architected and owned a modular Game Scenario framework that let designers iterate on gameplay flow and content directly, sharply reducing the engineering involvement needed for tuning and changes.</li>
-          <li>Built three playable game-mode prototypes in four months, extending existing systems and building new ones while pushing legacy code to its limits without compromising stability.</li>
-          <li>Collaborated with Art and Design to shape the tutorial and first-time player experience, using iterative playtesting and player-feedback analysis to surface friction points and smooth onboarding.</li>
-          <li>Redesigned input control to enable dynamic, runtime-configurable input processing while remaining on the legacy Unreal input system.</li>
-          <li>Added full input remapping with non-QWERTY keyboard support, improving accessibility and making controls more intuitive for players.</li>
-          <li>Built and maintained standardised testing environments for gameplay systems, enabling reliable bug reproduction and faster debugging of in-production features.</li>
-        </ul>
+        <div class="meta">Aug 2023 — Present</div>
+        <h3>UI/Gameplay Programmer</h3>
+        <div class="studio">Wargaming · Steel Hunters (AAA PvPvE Extraction Shooter, PC) and an unannounced vehicular multiplayer game (PC/Console)</div>
       </div>
       <div class="timeline-item">
         <div class="meta">Jul 2020 — Jul 2023</div>
         <h3>UI/Gameplay Programmer</h3>
         <div class="studio">Lesta Games · unannounced AAA PvPvE Extraction Shooter (PC/Console)</div>
-        <ul>
-          <li>Re-architected the ping system for performance and maintainability: streamlined client-server communication, introduced a scalable configuration framework that cut config complexity by 70%, and eliminated redundant server-to-client notifications.</li>
-          <li>Established MVC as the project's standard UI architecture, decoupling presentation from business logic to stabilise the UI layer during active development and significantly reduce unplanned maintenance.</li>
-          <li>Implemented game-wide deterministic random seeding, enabling reliable reproduction of any in-game scenario and significantly accelerating bug investigation.</li>
-          <li>Designed a settings plugin providing centralised control over in-game parameters, with an API that auto-generates UI for new settings without manual wiring.</li>
-        </ul>
       </div>
       <div class="timeline-item">
         <div class="meta">Nov 2019 — Jun 2020</div>
         <h3>Gameplay/UI Programmer</h3>
-        <div class="studio">Social Quantum · Magic High — Match-3 (iOS/Android, discontinued)</div>
-        <ul>
-          <li>Implemented responsive UI layouts optimised for the full spectrum of mobile resolutions and aspect ratios.</li>
-          <li>Refactored the flipbook animation system, reducing per-frame overhead and improving overall performance.</li>
-        </ul>
+        <div class="studio">Social Quantum · Magic High — Match-3 (iOS/Android)</div>
       </div>
       <div class="timeline-item">
         <div class="meta">Feb 2019 — Nov 2019</div>
         <h3>C++ Programmer</h3>
-        <div class="studio">Alawar · Watchers — Battle Royale Shooter (PC, discontinued)</div>
-        <ul>
-          <li>Shipped a battle pass feature end to end — UI visuals, client-side state logic, and backend integration — delivering a core monetisation and engagement system.</li>
-          <li>Prototyped a range of gameplay objects, including weapons and environmental hazards, taking the strongest concepts through to production quality.</li>
-        </ul>
+        <div class="studio">Alawar · Watchers — Battle Royale Shooter (PC)</div>
       </div>
       <div class="timeline-item">
         <div class="meta">May 2018 — Oct 2018</div>
         <h3>C++ Programmer</h3>
-        <div class="studio">3D Forge · T-Man Journey — Sidescroller Runner (Android, discontinued)</div>
-        <ul>
-          <li>Designed and implemented a chunk-based procedural generation system for infinite levels, handling runtime streaming, content variety, and seamless transitions between chunks.</li>
-          <li>Built character traversal systems spanning movement logic, animation blueprints, and collision detection.</li>
-        </ul>
+        <div class="studio">3D Forge · T-Man Journey — Sidescroller Runner (Android)</div>
       </div>
     </div>
   </div>
